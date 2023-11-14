@@ -1,6 +1,5 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
-import './App.css'; // You can keep or remove this line based on your styling preferences
+import './App.css';
 import axios from 'axios';
 
 function App() {
@@ -21,7 +20,7 @@ function App() {
 
   return (
     <div className="App">
-      {/* Your JSX code goes here */}
+      {}
       <ul>
         {data.map((value) => (
           <li key={value.id}>
