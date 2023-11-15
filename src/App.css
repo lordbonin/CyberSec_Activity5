@@ -47,3 +47,15 @@
   max-width: 100%;
   height: auto;
 }
+
+
+.read-more-button {
+  color: blue;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  /* Add transition for smooth color change */
+}
+
+.read-more-button:hover {
+  color: gray;
+}

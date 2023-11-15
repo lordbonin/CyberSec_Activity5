@@ -27,11 +27,18 @@ const PostCard = ({ post }) => {
   return (
     <div className="post-card">
       <div className="card">
-        <h2 className="card-title">{post.title.rendered}</h2>
+        {/* Wrap the title in an anchor tag with the post link */}
+        <h2 className="card-title">
+          <a href={post.link} target="_blank" rel="noopener noreferrer">
+            {post.title.rendered}
+          </a>
+        </h2>
         <p className="card-date">{postDate}</p>
         <div className="card-content" dangerouslySetInnerHTML={{ __html: limitedContent }} />
         {post.content.rendered.split(' ').length > 50 && (
-          <button className="read-more-button">Read More</button>
+          <a href={post.link} target="_blank" rel="noopener noreferrer">
+            <button className="read-more-button">Read More</button>
+          </a>
         )}
       </div>
     </div>
@@ -63,7 +70,7 @@ function App() {
   return (
     <div className="App">
       <header className="Header1">The Official Website of AdDU Posts!</header>
-
+      <div className='text-6xl font-bold mt-11'>AdDU Latest Posts!</div>
       <div className="App-header">
         {filteredData.map((post) => (
           <PostCard key={post.id} post={post} />
