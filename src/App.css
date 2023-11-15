@@ -2,6 +2,18 @@
   text-align: center;
 }
 
+.Header1 {
+  text-align: left;
+  background-color: #023066;
+  color: white;
+  font-style: italic;
+}
+
+.Header2 {
+  text-align: center;
+}
+
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -14,15 +26,18 @@
 }
 
 .App-header {
-  background-color: #ffffff;
+  background-color: #a5a3a3;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  text-align: center;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: rgb(29, 27, 27);
 }
+
+
 
 .App-link {
   color: #61dafb;
@@ -32,6 +47,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
