@@ -22,6 +22,7 @@
   flex: 0 0 calc(33.33% - 20px);
   justify-content: center;
   flex-wrap: wrap;
+  display: flex;
 }
 
 .card {
@@ -29,12 +30,12 @@
   border-radius: 8px;
   padding: 25px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 250px;
+  width: 350px;
 }
 
 .card-title {
   font-size: 1.2em;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   font-weight: bold;
 }
 
@@ -48,14 +49,91 @@
   height: auto;
 }
 
-
 .read-more-button {
   color: blue;
   cursor: pointer;
   transition: color 0.3s ease;
-  /* Add transition for smooth color change */
 }
 
 .read-more-button:hover {
   color: gray;
+}
+
+.StickyHeader {
+  position: sticky;
+  top: 0;
+  background-color: #ffffff;
+  color: #575757;
+  padding: 10px;
+  text-align: center;
+  z-index: 1000;
+  font-weight: 500;
+}
+
+.ButtonRow {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.HeaderButton {
+  background-color: transparent;
+  border: none;
+  color: #3b3b3b;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 50px;
+}
+
+.HeaderButton:hover {
+  text-decoration: underline;
+}
+
+.Footer {
+  background-color: #023066;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  bottom: 0;
+  width: 100%;
+}
+
+.Footer2 {
+  background-color: #0a1128;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  bottom: 0;
+  width: 100%;
+  font-size: 12px;
+}
+
+:root {
+  --list-style-type: none;
+}
+
+
+.FooterColumns {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.FooterColumn {
+  flex: 1;
+  padding: 10px;
+  text-align: left;
+  list-style-type: var(--list-style-type);
+  /* Add this line */
+}
+
+.FooterColumn h3 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.FooterColumn ul {
+  list-style-type: var(--list-style-type);
+  font-size: 12px;
 }
