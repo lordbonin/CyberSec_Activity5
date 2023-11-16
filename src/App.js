@@ -1,19 +1,74 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import axios from 'axios';
+import '@fortawesome/fontawesome-free/css/all.css';
 
-// Card component to display individual posts
+const DateTime = ({ dateTime }) => {
+  const options = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  };
+
+  const formattedDateTime = dateTime.toLocaleString('en-US', options);
+
+  return <span className="datetime">{formattedDateTime}</span>;
+};
+
+const TwitterLogo = () => (
+  <span className="additional-content">
+    | <img src={process.env.PUBLIC_URL + '/twitterLogo.png'} alt="Twitter Logo" style={{ height: '2em', verticalAlign: 'middle' }}/> Twitter
+  </span>
+);
+
+const HeaderNavigation = () => (
+  <header className="StickyHeader">
+    <div className="ButtonRow">
+      <div className="logo-container">
+        <span>
+          <img src={process.env.PUBLIC_URL + '/site-logo.png'} alt="Site Logo" />
+          <img src={process.env.PUBLIC_URL + '/site.png'} alt="Site" />
+        </span> 
+      </div>
+        <ul className="ButtonRow">
+        <li>KNOW DAVAO CITY</li>
+        <li>DEPARTMENTS</li>
+        <li>SERVICES</li>
+        <li>TRANSPARENCY</li>
+        <li>NEWS</li>
+        <li>CONTACT US</li>
+        <SearchIcon />
+        <AdditionalLogo />
+        </ul>
+    </div>
+  </header>
+);
+
+const SearchIcon = () => (
+  <span className="search-icon">
+    <i className="fas fa-search"></i>
+  </span>
+);
+
+const AdditionalLogo = () => (
+  <span className="additional-logo">
+    <img src={process.env.PUBLIC_URL + '/iso-logo.png'} alt="Additional Logo"/>
+  </span>
+);
+
+
 const PostCard = ({ post }) => {
-  // Parse the date string and format it
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  // Extract and format the date from the post
   const postDate = formatDate(post.date);
 
-  // Limit the content to 100 words
   const limitContent = (content, limit) => {
     const words = content.split(' ');
     if (words.length > limit) {
@@ -27,13 +82,12 @@ const PostCard = ({ post }) => {
   return (
     <div className="post-card">
       <div className="card">
-        {/* Wrap the title in an anchor tag with the post link */}
         <h2 className="card-title">
           <a href={post.link} target="_blank" rel="noopener noreferrer">
             {post.title.rendered}
           </a>
         </h2>
-        <p className="mt-10 mb-10 font-semibold">| {postDate} |</p>
+        <p className="card-date">{postDate}</p>
         <div className="card-content" dangerouslySetInnerHTML={{ __html: limitedContent }} />
         {post.content.rendered.split(' ').length > 50 && (
           <a href={post.link} target="_blank" rel="noopener noreferrer">
@@ -47,9 +101,10 @@ const PostCard = ({ post }) => {
 
 function App() {
   const adduLink = 'https://www.addu.edu.ph/wp-json/wp/v2/posts';
-  const postIDs = useMemo(() => [13157, 13161, 13136, 13147, 13126, 13102, 13090, 13171, 13060, 13034], []);
+  const postIDs = [13157, 13161, 13136, 13147, 13126, 13102, 13090, 13171, 13060, 13034];
 
   const [data, setData] = useState([]);
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
   useEffect(() => {
     async function fetchData() {
@@ -62,108 +117,98 @@ function App() {
     }
 
     fetchData();
+
+    const intervalId = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(intervalId);
   }, [postIDs]);
 
-  // Filter the data based on the specified postIDs
   const filteredData = data.filter((value) => postIDs.includes(value.id));
 
   return (
     <div className="App">
-      <header className="Header1">The Official Website of AdDU Posts!</header>
-      {/* Add a sticky header */}
-      <header className="StickyHeader">
-        <div className="ButtonRow">
-
-          <button className="HeaderButton">KNOW DAVAO CITY</button>
-          <button className="HeaderButton">DEPARTMENTS</button>
-          <button className="HeaderButton">SERVICES</button>
-          <button className="HeaderButton">TRANSPARENCY</button>
-          <button className="HeaderButton">NEWS</button>
-          <button className="HeaderButton">CONTACT US</button>
-
+      <header className="Header1">
+        <span>The Unofficial Website for Ateneo de Davao University!</span>
+        <div className='additional-content'>
+          <DateTime dateTime={currentDateTime} />
+          <span className="additional-content">
+            <span className="separator">|</span>
+            <a href="https://www.facebook.com/your-facebook-page" target="_blank" title="Visit our Facebook Page" rel="external" className="social-link"><i className="fab fa-facebook-f"></i><small>Facebook</small></a>
+            <a href="https://twitter.com/your-twitter-profile" target="_blank" title="Visit our Twitter Profile" rel="external" className="social-link"><i className="fab fa-twitter"></i><small>Twitter</small></a>
+            <a href="tel:+123456789" target="_blank" title="Contact Us" rel="external" className="social-link"><i className="fas fa-phone"></i><small>Contact Us</small></a>
+          </span> 
         </div>
       </header>
-
-      <div className='text-6xl font-bold mt-11 mb-11'>AdDU Latest Posts!</div>
+      <HeaderNavigation />
+      <div className='addu'>AdDU Latest Posts!</div>
       <div className="App-header">
         {filteredData.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}
       </div>
-
       <footer className="Footer">
-        <div className="FooterColumns">
-          <div className="FooterColumn">
-            <h3>VISIT US</h3>
-            <ul>
-              <li> City Government of Davao </li>
-              <li> City Information Office </li>
-              <li> Room 18, City Hall Bldg. </li>
-              <li> San Pedro St., Davao City </li>
-              <li> 8000 Philippines </li>
-            </ul>
+        <div className="footer-column">
+          <h4>VISIT US</h4>
+          <p>City Government of Davao</p>
+          <p>City Information Office</p>
+          <p>Room 18, City Hall Bldg.</p>
+          <p>San Pedro St., Davao City</p>
+          <p>8000 Philippines</p>
 
-            <h3 className='mt-12'>CONTACT US</h3>
-            <ul>
-              <li> Tel No.: (082) 241-1000 </li>
-              <li> Email Address: </li>
-              <li> cio@davaocity.gov.ph </li>
-            </ul>
-          </div>
+          <div className='addu'></div>
 
-          <div className="FooterColumn">
-            <h3>ABOUT THE LGU</h3>
-            <ul>
-              <li> Know Davao City </li>
-              <li> Departments </li>
-              <li> Services </li>
-              <li> Transparency </li>
-              <li> News </li>
-              <li> Contact Us </li>
-            </ul>
-
-            <h3 className='mt-8'>TOURISM INFORMATION</h3>
-            <ul>
-              <li> Tourism </li>
-            </ul>
-          </div>
-
-          <div className="FooterColumn">
-            <h3>SERVICES</h3>
-            <ul>
-              <li> Career Opportunities </li>
-              <li> Landmark Legislations </li>
-              <li> Processing of Business Permits </li>
-              <li> Online Payment </li>
-            </ul>
-
-            <h3 className='mt-16'>DOING BUSINESS</h3>
-            <ul>
-              <li> Business Bureau </li>
-              <li> DCIPC </li>
-            </ul>
-          </div>
-          <div className="FooterColumn">
-            <h3>GOVERNMENT LINKS</h3>
-            <ul>
-              <li> Republic of the Philippines </li>
-              <li> DILG </li>
-              <li> DTI </li>
-              <li> DepEd </li>
-              <li> Tourism </li>
-            </ul>
-
-            <h3 className='mt-10'>SOCIAL MEDIA</h3>
-            <ul>
-              <li> Facebook </li>
-              <li> Twitter </li>
-            </ul>
-          </div>
+          <h4>CONTACT US</h4>
+          <p>Tel No.: (082) 241-1000</p>
+          <p>Email Address:</p>
+          <p>cio@davaocity.gov.ph</p>
         </div>
 
+
+        <div className="footer-column">
+          <h4>ABOUT THE LGU</h4>
+          <p>Know Davao City</p>
+          <p>Departments</p>
+          <p>Services</p>
+          <p>Transparency</p>
+          <p>News</p>
+          <p>Contact Us</p>
+
+          <div className='addu'></div>
+
+          <h4>TOURISM INFORMATION</h4>
+          <p>Tourism</p>
+        </div>
+
+        <div className="footer-column">
+          <h4>SERVICES</h4>
+          <p>Career Opportunities</p>
+          <p>Landmark Legislations</p>
+          <p>Processing of Business Permits</p>
+          <p>Online Payment</p>
+
+          <div className='addu'></div>
+          <h4>Business Bureau</h4>
+          <p>DCIPC</p>
+        </div>
+
+        <div className="footer-column">
+          <h4>GOVERNMENT LINKS</h4>
+          <p>Republic of the Philippines</p>
+          <p>DILG</p>
+          <p>DTI</p>
+          <p>DepEd</p>
+          <p>Tourism</p>
+
+          <div className='addu'></div>
+          <h4>SOCIAL MEDIA</h4>
+          <p>Facebook</p>
+          <p>Twitter</p>
+        </div>
       </footer>
-      <footer className='Footer2'>
-        <p>© 2023 Martirez, Bonin. All Rights Reserved.</p>
+      <footer className='SecondFooter'>
+      Ⓒ 2023. Lord Bonin Tortor & Anton Martirez. All Rights Reserved.
       </footer>
     </div>
   );
